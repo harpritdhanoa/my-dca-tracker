@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "./components/ui/Card";
 import CardContent from "./components/ui/Card";
 import Button from "./components/ui/Button";
@@ -11,11 +11,29 @@ const defaultStocks = [
   { name: "Johnson & Johnson", ticker: "JNJ", target: 44000, invested: 15000, trend: "Rising", shareCount5Y: 1.01, epsGrowth5Y: 1.12, sbcToRevenue: 0.01, hasBuybacks: true, dilutionPurpose: "Stock-based compensation" },
 ];
 
+const CACHE_KEY = 'stocksCache';
+const CACHE_TIMESTAMP_KEY = 'stocksCacheTimestamp';
+const CACHE_DURATION_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
+
 export default function DCAInvestmentTracker() {
-  const [stocks, setStocks] = useState(defaultStocks);
+  const [stocks, setStocks] = useState([]);
   const [newStock, setNewStock] = useState({ name: "", ticker: "", target: "", invested: "", trend: "", shareCount5Y: "", epsGrowth5Y: "", sbcToRevenue: "", hasBuybacks: false, dilutionPurpose: "" });
   const [monthlyBudget, setMonthlyBudget] = useState(29000);
   const [debtFund, setDebtFund] = useState(150000);
+
+  useEffect(() => {
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    const timestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+    const isFresh = timestamp && (Date.now() - Number(timestamp)) < CACHE_DURATION_MS;
+
+    if (cachedData && isFresh) {
+      setStocks(JSON.parse(cachedData));
+    } else {
+      setStocks(defaultStocks);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(defaultStocks));
+      localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+    }
+  }, []);
 
   const calculateProgress = (invested, target) => ((invested / target) * 100).toFixed(1);
 
@@ -29,6 +47,8 @@ export default function DCAInvestmentTracker() {
       };
     });
     setStocks(updated);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(updated));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
   };
 
   const assessDilution = (stock) => {
@@ -54,7 +74,7 @@ export default function DCAInvestmentTracker() {
   };
 
   const handleAddStock = () => {
-    setStocks(prevStocks => [
+    const updatedStocks = [
       {
         ...newStock,
         target: Number(newStock.target),
@@ -64,14 +84,19 @@ export default function DCAInvestmentTracker() {
         sbcToRevenue: Number(newStock.sbcToRevenue),
         hasBuybacks: Boolean(newStock.hasBuybacks),
       },
-      ...prevStocks
-    ]);
+      ...stocks
+    ];
+    setStocks(updatedStocks);
     setNewStock({ name: "", ticker: "", target: "", invested: "", trend: "", shareCount5Y: "", epsGrowth5Y: "", sbcToRevenue: "", hasBuybacks: false, dilutionPurpose: "" });
+    localStorage.setItem(CACHE_KEY, JSON.stringify(updatedStocks));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
   };
 
   const handleDeleteStock = (index) => {
     const updatedStocks = stocks.filter((_, idx) => idx !== index);
     setStocks(updatedStocks);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(updatedStocks));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
   };
 
   return (
@@ -112,7 +137,7 @@ export default function DCAInvestmentTracker() {
         })}
       </div>
 
-      <!-- Remaining unchanged -->
+      {/* Remaining unchanged */}
 
     </div>
   );
