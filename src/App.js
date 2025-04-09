@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Card, CardContent } from "./components/ui/card"; // Updated import paths
-import Card from './components/ui/Card';
+import Card from "./components/ui/Card";
+import CardContent from "./components/ui/Card";
 import { Button } from "./components/ui/button"; // Updated import paths
 import { Input } from "./components/ui/input"; // Updated import paths
 import { Label } from "./components/ui/label"; // Updated import paths
