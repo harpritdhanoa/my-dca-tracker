@@ -17,6 +17,8 @@ const CACHE_DURATION_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
 
 export default function DCAInvestmentTracker() {
   const [stocks, setStocks] = useState([]);
+  const [query, setQuery] = useState("");
+  const [filters] = useState(["Tech", "Banking", "Healthcare", "Energy", "Consumer Goods"]);
   const [newStock, setNewStock] = useState({ name: "", ticker: "", target: "", invested: "", trend: "", shareCount5Y: "", epsGrowth5Y: "", sbcToRevenue: "", hasBuybacks: false, dilutionPurpose: "" });
   const [monthlyBudget, setMonthlyBudget] = useState(29000);
   const [debtFund, setDebtFund] = useState(150000);
@@ -101,6 +103,15 @@ export default function DCAInvestmentTracker() {
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto max-h-screen animate-fade-in bg-[#f5f7fa] font-sans">
+      <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+        <Input placeholder="Search US Stocks" value={query} onChange={(e) => setQuery(e.target.value)} className="mb-2 md:mb-0 w-full md:w-auto" />
+        <div className="flex flex-wrap gap-2">
+          {filters.map((f, idx) => (
+            <Button key={idx} className="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">{f}</Button>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stocks.map((stock, idx) => {
           const remaining = stock.target - stock.invested;
@@ -136,9 +147,6 @@ export default function DCAInvestmentTracker() {
           );
         })}
       </div>
-
-      {/* Remaining unchanged */}
-
     </div>
   );
 }
