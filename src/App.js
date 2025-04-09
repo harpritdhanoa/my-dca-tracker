@@ -1,10 +1,10 @@
+import './App.css';
 import { useState } from "react";
 import Card from "./components/ui/Card";
 import CardContent from "./components/ui/Card";
-import Button  from "./components/ui/Button"; // Updated import paths
-import Input from "./components/ui/Input"; // Updated import paths
-import Label from "./components/ui/Label"; // Updated import paths
-import './App.css';
+import Button from "./components/ui/Button";
+import Input from "./components/ui/Input";
+import Label from "./components/ui/Label";
 
 const defaultStocks = [
   { name: "Apple", ticker: "AAPL", target: 44000, invested: 8800, trend: "Falling", shareCount5Y: 1.05, epsGrowth5Y: 1.3, sbcToRevenue: 0.03, hasBuybacks: true, dilutionPurpose: "Strategic" },
@@ -46,20 +46,28 @@ export default function DCAInvestmentTracker() {
   };
 
   const handleAddStock = () => {
-    setStocks([...stocks, {
-      ...newStock,
-      target: Number(newStock.target),
-      invested: Number(newStock.invested),
-      shareCount5Y: Number(newStock.shareCount5Y),
-      epsGrowth5Y: Number(newStock.epsGrowth5Y),
-      sbcToRevenue: Number(newStock.sbcToRevenue),
-      hasBuybacks: Boolean(newStock.hasBuybacks),
-    }]);
+    setStocks(prevStocks => [
+      {
+        ...newStock,
+        target: Number(newStock.target),
+        invested: Number(newStock.invested),
+        shareCount5Y: Number(newStock.shareCount5Y),
+        epsGrowth5Y: Number(newStock.epsGrowth5Y),
+        sbcToRevenue: Number(newStock.sbcToRevenue),
+        hasBuybacks: Boolean(newStock.hasBuybacks),
+      },
+      ...prevStocks
+    ]);
     setNewStock({ name: "", ticker: "", target: "", invested: "", trend: "", shareCount5Y: "", epsGrowth5Y: "", sbcToRevenue: "", hasBuybacks: false, dilutionPurpose: "" });
   };
 
+  const handleDeleteStock = (index) => {
+    const updatedStocks = stocks.filter((_, idx) => idx !== index);
+    setStocks(updatedStocks);
+  };
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-screen animate-fade-in">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stocks.map((stock, idx) => {
           const remaining = stock.target - stock.invested;
@@ -68,7 +76,7 @@ export default function DCAInvestmentTracker() {
           const dilutionAssessment = assessDilution(stock);
 
           return (
-            <Card key={idx} className={highlight ? "border-green-500 border-2" : ""}>
+            <Card key={idx} className={`transition-transform transform hover:scale-105 duration-200 ${highlight ? "border-green-500 border-2" : ""}`}>
               <CardContent className="p-4">
                 <h2 className="text-xl font-bold mb-2">{stock.name} ({stock.ticker})</h2>
                 <p>🎯 Target: £{stock.target.toLocaleString()}</p>
@@ -78,6 +86,7 @@ export default function DCAInvestmentTracker() {
                 <p>📈 Trend: <span className={highlight ? "text-green-600 font-semibold" : ""}>{stock.trend}</span></p>
                 {stock.suggestion && <p className="mt-2 text-blue-600">💡 Suggested Allocation: £{stock.suggestion.toFixed(0)}</p>}
                 <p className="mt-2">🧪 Dilution Assessment: <span className={getDilutionColor(dilutionAssessment)}>{dilutionAssessment}</span></p>
+                <Button className="mt-2 bg-red-500 hover:bg-red-600 text-white" onClick={() => handleDeleteStock(idx)}>Delete</Button>
               </CardContent>
             </Card>
           );
@@ -85,7 +94,7 @@ export default function DCAInvestmentTracker() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-4 border rounded-xl">
+        <div className="p-4 border rounded-xl animate-fade-in">
           <h3 className="text-lg font-semibold mb-2">Add New Stock</h3>
           <div className="space-y-2">
             <div>
@@ -128,14 +137,14 @@ export default function DCAInvestmentTracker() {
               <Label>Has Buybacks?</Label>
               <Input type="checkbox" checked={newStock.hasBuybacks} onChange={(e) => setNewStock({ ...newStock, hasBuybacks: e.target.checked })} />
             </div>
-            <Button onClick={handleAddStock} className="mt-2 w-full">Add Stock</Button>
+            <Button onClick={handleAddStock} className="mt-2 w-full transition-all hover:scale-105">Add Stock</Button>
           </div>
         </div>
 
-        <div className="p-4 border rounded-xl text-center">
+        <div className="p-4 border rounded-xl text-center animate-fade-in">
           <h3 className="text-lg font-semibold">Monthly Budget</h3>
           <p className="text-2xl font-bold text-blue-600 mb-2">£{monthlyBudget.toLocaleString()}</p>
-          <Button onClick={suggestAllocation}>Suggest Allocation</Button>
+          <Button onClick={suggestAllocation} className="transition-transform hover:scale-105">Suggest Allocation</Button>
 
           <div className="mt-6">
             <h4 className="font-semibold text-md">📦 Debt Reserve (30%)</h4>
@@ -146,4 +155,3 @@ export default function DCAInvestmentTracker() {
     </div>
   );
 }
-
