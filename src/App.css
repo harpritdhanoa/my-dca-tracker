@@ -1,110 +1,93 @@
 /* App.css */
 
-/* Global styles */
-* {
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  background-color: #f6f9fc;
 }
 
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f7fc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+h2, h3, h4 {
+  color: #1a202c;
 }
 
-.App {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+input[type="text"],
+input[type="number"] {
   width: 100%;
-  max-width: 1200px;
-  box-sizing: border-box;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition: border 0.3s ease;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #3b82f6;
+  outline: none;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-content {
+  padding: 1.25rem;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 button:hover {
-  background-color: #45a049;
+  transform: scale(1.05);
+  opacity: 0.95;
 }
 
-/* Input Fields */
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+/* Scroll fixes */
+html,
+body,
+#root {
+  height: 100%;
+  overflow-x: hidden;
 }
 
-input[type="number"] {
-  width: 100%;
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-input:focus {
-  outline: none;
-  border-color: #4CAF50;
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
 }
-
-/* Card component */
-.card {
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.card h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.card p {
-  font-size: 16px;
-  color: #555;
-}
-
-/* Layout for forms and content */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-/* Styling for smaller screens */
-@media (max-width: 768px) {
-  .App {
-    padding: 15px;
-  }
-
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-}
-

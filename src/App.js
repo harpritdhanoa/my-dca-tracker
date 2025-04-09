@@ -14,8 +14,8 @@ const defaultStocks = [
 export default function DCAInvestmentTracker() {
   const [stocks, setStocks] = useState(defaultStocks);
   const [newStock, setNewStock] = useState({ name: "", ticker: "", target: "", invested: "", trend: "", shareCount5Y: "", epsGrowth5Y: "", sbcToRevenue: "", hasBuybacks: false, dilutionPurpose: "" });
-  const monthlyBudget = 29000;
-  const debtFund = 150000;
+  const [monthlyBudget, setMonthlyBudget] = useState(29000);
+  const [debtFund, setDebtFund] = useState(150000);
 
   const calculateProgress = (invested, target) => ((invested / target) * 100).toFixed(1);
 
@@ -143,12 +143,22 @@ export default function DCAInvestmentTracker() {
 
         <div className="p-4 border rounded-xl text-center animate-fade-in">
           <h3 className="text-lg font-semibold">Monthly Budget</h3>
-          <p className="text-2xl font-bold text-blue-600 mb-2">£{monthlyBudget.toLocaleString()}</p>
-          <Button onClick={suggestAllocation} className="transition-transform hover:scale-105">Suggest Allocation</Button>
+          <Input
+            type="number"
+            value={monthlyBudget}
+            onChange={(e) => setMonthlyBudget(Number(e.target.value))}
+            className="text-center font-bold text-blue-600 text-2xl"
+          />
+          <Button onClick={suggestAllocation} className="mt-2 transition-transform hover:scale-105">Suggest Allocation</Button>
 
           <div className="mt-6">
             <h4 className="font-semibold text-md">📦 Debt Reserve (30%)</h4>
-            <p className="text-lg font-bold text-gray-700">£{debtFund.toLocaleString()}</p>
+            <Input
+              type="number"
+              value={debtFund}
+              onChange={(e) => setDebtFund(Number(e.target.value))}
+              className="text-center font-bold text-gray-700 text-lg"
+            />
           </div>
         </div>
       </div>
