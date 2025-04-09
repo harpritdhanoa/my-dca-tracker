@@ -4,6 +4,7 @@ import CardContent from "./components/ui/Card";
 import Button  from "./components/ui/Button"; // Updated import paths
 import Input from "./components/ui/Input"; // Updated import paths
 import Label from "./components/ui/Label"; // Updated import paths
+import './App.css';
 
 const defaultStocks = [
   { name: "Apple", ticker: "AAPL", target: 44000, invested: 8800, trend: "Falling", shareCount5Y: 1.05, epsGrowth5Y: 1.3, sbcToRevenue: 0.03, hasBuybacks: true, dilutionPurpose: "Strategic" },
