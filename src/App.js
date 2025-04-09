@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Card from "./components/ui/Card";
 import CardContent from "./components/ui/Card";
-import { Button } from "./components/ui/button"; // Updated import paths
-import { Input } from "./components/ui/input"; // Updated import paths
-import { Label } from "./components/ui/label"; // Updated import paths
+import Button  from "./components/ui/button"; // Updated import paths
+import Input from "./components/ui/input"; // Updated import paths
+import Label from "./components/ui/label"; // Updated import paths
 
 const defaultStocks = [
   { name: "Apple", ticker: "AAPL", target: 44000, invested: 8800, trend: "Falling", shareCount5Y: 1.05, epsGrowth5Y: 1.3, sbcToRevenue: 0.03, hasBuybacks: true, dilutionPurpose: "Strategic" },
